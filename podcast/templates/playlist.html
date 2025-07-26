@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Podcast Library</title>
+    <link rel="stylesheet" href="../static/css/main.css"/>
+    <link rel="icon" type="image/x-icon" href="../static/podcast-lib-logo copy.png"/>
+    <script src="https://kit.fontawesome.com/33984f2cf4.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include"navbar.html" %}
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <header id="header"> {{ user_name }}'s playlist <i class="fa-regular fa-circle-play"></i><div class="copyright">&copy; cbla298 | lrem922 | jbon222</div></header>
+    <div id="playlist-grid">
+        <div class="playlist">
+            <ul>
+                <h3>{{ num_podcasts }} Podcast(s) in your Playlist</h3>
+                {% for item in podcast_playlist %}
+                    <li>
+                        <a href="{{ url_for('show_bp.show', podcast_id=item.id) }}">{{ item.title }} by {{ item.author }}</a>
+                        <a href="{{ url_for('playlist.remove_from_playlist', podcast_id=item.id, episode_id=0) }}"><i class="fa-solid fa-trash "></i></a>
+                    </li>
+                {% else %}
+                    <p>Your playlist is empty!</p>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="playlist">
+            <ul>
+                <h3>{{ num_episodes }} Episode(s) in your Playlist</h3>
+                {% for item in episode_playlist %}
+                    <li>
+                        <a href="{{ url_for('show_bp.show', podcast_id=item.podcast_id) }}">{{ item.title }} by {{ item.author }}</a>
+                        <a href="{{ url_for('playlist.remove_from_playlist', podcast_id=item.podcast_id, episode_id=item.id) }}"><i class="fa-solid fa-trash"></i></a>
+                    </li>
+                {% else %}
+                    <p>Your playlist is empty!</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

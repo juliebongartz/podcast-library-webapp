@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ podcast.title }}</title>
+    <link rel="stylesheet" href="../static/css/main.css"/>
+    <link rel="icon" type="image/x-icon" href="../static/podcast-lib-logo copy.png"/>
+    <script src="https://kit.fontawesome.com/33984f2cf4.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include"navbar.html" %}
+
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <div style="margin: 1%;">
+        <button onclick="window.location.href='{{ session['history'] }}'" class="back-button" style="padding-right: 2%;">
+            <i class="fa-solid fa-arrow-left"></i> Go Back
+        </button>
+    </div>
+
+    <div id="container">
+        <div id="podcast-details">
+            <div id="img-and-playlist">
+                <img src="{{ podcast.image }}" alt="Podcast Logo">
+
+                <!--Podcast Playlisting-->
+                {% if user_in_session %}
+                    {% if podcast.id not in user_podcast_playlist %}
+                        <button class="add-button" onclick="location.href='{{ url_for('playlist.add_to_playlist', podcast_id=podcast.id, episode_id=0) }}'">Add Podcast to Playlist</button>
+                    {% else %}
+                        <button class="remove-button" onclick="location.href='{{ url_for('playlist.remove_from_playlist', podcast_id=podcast.id, episode_id=0) }}'">Remove Podcast from Playlist</button>
+                    {% endif %}
+                {% else %}
+                    <button class="playlist-login-button" onclick="location.href='{{ url_for('authentication_bp.login') }}'">Log In to Add Podcast to Playlist</button>
+                {% endif %}
+
+            </div>
+            <ul>
+                <header id="header"> {{ podcast.title }} <div class="copyright">&copy; cbla298 | lrem922 | jbon222 </div></header>
+
+                <li><strong>About: </strong>{{ podcast.description }}</li><br>
+                <li><strong>Author: </strong>{{ podcast.author }}</li>
+                <li><strong>Language: </strong>{{ podcast.language }}</li>
+                <li><strong>Categories: </strong>{{ podcast.categories | join(' | ') }}</li>
+                <li><strong>Website: </strong><a href="{{ podcast.website }}">{{ podcast.website }}</a></li>
+            </ul>
+        </div>
+
+        <!--Reviews-->
+        <div class="review-buttons">
+            {% if podcast._reviews|length > 0 and podcast_dict.id != show_reviews_for_podcast %}
+                <button class="pag-button" onclick="location.href='{{ podcast_dict.view_review_url }}'">{{ podcast._reviews|length }} Review(s)</button>
+            {% endif %}
+            <button class="pag-button" onclick="location.href='{{ add_review_url }}'">Review</button>
+        </div>
+
+        {% if podcast_dict.id == show_reviews_for_podcast %}
+        <div style="clear:both" class="form-reviews">
+
+                <h3 style="text-align:center">Reviews</h3>
+
+            {% for review in podcast._reviews %}
+            <div class="form-review">
+                <p style="text-decoration: underline;margin-bottom:0px;">{{review._rating}}★ by {{review._poster._username}}</p>
+                <p style="font-style: italic;margin-top:0px;">"{{review._comment}}"</p>
+            </div>
+            <br>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+
+
+    <!-- Episodes -->
+    <h1 style="font-family: 'Playfair Display', serif; text-align: center">Episodes</h1>
+    {% if episodes %}
+        <div class="episodes">
+            {% for episode in episodes %}
+                    <div class="episode">
+                        <a href="{{ episode.audio_link }}" target="_blank">
+                            <h3>{{ episode.title }}</h3>
+                            <p>Description: {{ episode.description }}</p>
+                            <p>Length: {{ episode_length_to_min(episode.audio_length) }} minutes</p>
+                            <p>Publish Date: {{ episode.publish_date }}</p>
+
+                            <!-- Episode Playlisting -->
+                            {% if user_in_session %}
+                                {% if episode.id not in user_episode_playlist %}
+                                    <button class="add-button" onclick="location.href='{{ url_for('playlist.add_to_playlist', podcast_id=podcast.id, episode_id=episode.id) }}'">Add Episode to Playlist</button>
+                                {% else %}
+                                    <button class="remove-button" onclick="location.href='{{ url_for('playlist.remove_from_playlist', podcast_id=podcast.id, episode_id=episode.id) }}'">Remove Episode from Playlist</button>
+                                {% endif %}
+                            {% else %}
+                                <button class="playlist-login-button" onclick="location.href='{{ url_for('authentication_bp.login') }}'">Log In to Add Episode to Playlist</button>
+                            {% endif %}
+
+                        </a>
+                    </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h3 style="text-align: center">No episodes available for this podcast yet.</h3>
+    {% endif %}
+
+    <!--Pagination-->
+    {% if number_of_episodes > 3 %}
+        <nav style="clear:both">
+            <div style="float:left">
+                {% if first_episode_url is not none %}
+                    <button class="pag-button" onclick="location.href='{{first_episode_url}}'">First</button>
+                {% else %}
+                    <button class="pag-disabled-button" disabled>First</button>
+                {% endif %}
+                {% if prev_episode_url is not none %}
+                    <button class="pag-button" onclick="location.href='{{prev_episode_url}}'">Previous</button>
+                {% else %}
+                    <button class="pag-disabled-button" disabled>Previous</button>
+                {% endif %}
+            </div>
+            <div style="float:right">
+                {% if next_episode_url is not none %}
+                    <button class="pag-button" onclick="location.href='{{next_episode_url}}'">Next</button>
+                {% else %}
+                    <button class="pag-disabled-button" disabled>Next</button>
+                {% endif %}
+                {% if last_episode_url is not none %}
+                    <button class="pag-button" onclick="location.href='{{last_episode_url}}'">Last</button>
+                {% else %}
+                    <button class="pag-disabled-button" disabled>Last</button>
+                {% endif %}
+            </div>
+        </nav>
+    {% endif %}
+</body>
+</html>

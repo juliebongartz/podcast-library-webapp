@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Podcast Library</title>
+    <link rel="stylesheet" href="../static/css/main.css"/>
+    <link rel="icon" type="image/x-icon" href="../static/podcast-lib-logo copy.png"/>
+    <script src="https://kit.fontawesome.com/33984f2cf4.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include"navbar.html" %}
+
+    <header id="header"> CS235 Podcast Library <div class="copyright">&copy; cbla298 | lrem922 | jbon222</div>
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message|safe }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+        <div id="desc">Dive into a world of sound with CS325 Podcast Library! Browse our catalogue of top shows, from true crime to comedy, and stream your way to endless entertainment. Find, listen, and enjoy with ease!</div></header>
+
+    <header id="featured">Featured Podcasts<i class="fa-solid fa-star fa-lg"></i></header>
+    <div id="podcast-grid">
+    {% for podcast in podcasts %}
+        <a href="{{ url_for('show_bp.show', podcast_id=podcast['id']) }}">
+            <div class="podcast-item">
+                <img src="{{ podcast['image'] }}" alt="Podcast Logo">
+                <div class="podcast-info">
+                    <h3>{{ podcast['title'] }}</h3>
+                    <p>{{ podcast['categories'] | join(' | ') }}</p>
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+    </div>
+
+      <header id="browse"><a href={{ url_for("browse_bp.browse") }}>Browse Full Catalogue<i class="fa-solid fa-arrow-right fa-lg"></i></a></header>
+</body>
+</html>

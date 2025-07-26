@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="../static/css/main.css"/>
+    <link rel="icon" type="image/x-icon" href="../static/podcast-lib-logo copy.png"/>
+    <script src="https://kit.fontawesome.com/33984f2cf4.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include"navbar.html" %}
+
+    <header id="header">{{ title }}<div class="copyright">&copy; cbla298 | lrem922 | jbon222 </div></header>
+    {% if podcasts %}
+        <div id="podcast-grid" {% if number_of_podcasts < 5 %} style="width:{{ maximum_width }}%;" {% endif %}>
+            {% for podcast in podcasts %}
+                <a href="{{ url_for("show_bp.show", podcast_id=podcast.podcast_id) }}">
+                    <div class="podcast-item">
+                        <img src="{{ podcast.image }}" alt="Podcast Logo">
+                        <div class="podcast-info">
+                            <h3>{{ podcast.title }}</h3>
+                            <p>{{ podcast.categories | join(' | ') }}</p>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <h2 style="text-align: center">No podcasts found.</h2>
+    {% endif %}
+    <!--Pagination-->
+    {% if number_of_podcasts > 10 %}
+        <nav style="clear:both">
+                <div style="float:left">
+                    {% if first_podcast_url is not none %}
+                        <button class="pag-button" onclick="location.href='{{first_podcast_url}}'">First</button>
+                    {% else %}
+                        <button class="pag-disabled-button" disabled>First</button>
+                    {% endif %}
+                    {% if prev_podcast_url is not none %}
+                        <button class="pag-button" onclick="location.href='{{prev_podcast_url}}'">Previous</button>
+                    {% else %}
+                        <button class="pag-disabled-button" disabled>Previous</button>
+                    {% endif %}
+                </div>
+                <div style="float:right">
+                    {% if next_podcast_url is not none %}
+                        <button class="pag-button" onclick="location.href='{{next_podcast_url}}'">Next</button>
+                    {% else %}
+                        <button class="pag-disabled-button" disabled>Next</button>
+                    {% endif %}
+                    {% if last_podcast_url is not none %}
+                        <button class="pag-button" onclick="location.href='{{last_podcast_url}}'">Last</button>
+                    {% else %}
+                        <button class="pag-disabled-button" disabled>Last</button>
+                    {% endif %}
+                </div>
+            </nav>
+    {% endif %}
+
+</body>
+</html>

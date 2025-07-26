@@ -1,0 +1,36 @@
+<nav>
+    <img class="logo" src="../static/podcast-lib-logo copy.png" href="/">
+    <ul>
+        <li><a href="{{ url_for('home_bp.home') }}">Home</a></li>
+        <li><a href="{{ url_for('browse_bp.browse') }}">Podcasts</a></li>
+        <li><a href="{{ url_for('playlist.view_playlist') }}">My Playlist</a></li>
+    </ul>
+
+    <form id="search-form" method="get" action="{{ url_for('search_bp.search') }}">
+        <select id="filter" name="search_filter">
+            <option value="Title">Title</option>
+            <option value="Category">Category</option>
+            <option value="Author">Author</option>
+            <option value="Language">Language</option>
+        </select>
+        <input id="search" type="text" name="search_term" placeholder="Search...">
+        <button type="submit" id="search-submit">Search</button>
+    </form>
+
+    <div class="auth-user-section">
+        <ul class="auth-links">
+            {% if 'user_name' in session %}
+                <li><a href="{{ url_for('authentication_bp.logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('authentication_bp.login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+
+        <div id="user-symbols" class="user-info">
+            {% if 'user_name' in session %}
+                <span class="navbar-username">{{ session['user_name'] }}</span>
+                <i class="fa-solid fa-user fa-lg"></i>
+            {% endif %}
+        </div>
+    </div>
+</nav>

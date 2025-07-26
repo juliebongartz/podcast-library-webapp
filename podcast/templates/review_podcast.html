@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Review</title>
+    <link rel="stylesheet" href="../static/css/main.css"/>
+    <link rel="icon" type="image/x-icon" href="../static/podcast-lib-logo copy.png"/>
+    <script src="https://kit.fontawesome.com/33984f2cf4.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Istok+Web:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    {% include"navbar.html" %}
+    <div style="clear:both">
+        <div class="form-wrapper">
+            <h2 id="form">{{podcast.title}}</h2>
+            <form action="{{handler_url}}" method="post">
+                {{form.podcast_id}} <!-- Need to include this hidden field as it tracks the podcast being commented. -->
+                {{form.csrf_token}} <!-- Need to include this token - Flask WTForms requires it. -->
+                <br>
+                <div class ="form-field">{{form.comment.label}} </br>{{form.comment(size = 100, placeholder="type your comment", class="textarea", cols="50", rows="6", wrap="hard")}}
+                    {% if form.comment.errors %}
+                        <ul class="errors">
+        	            {% for error in form.comment.errors %}
+        		            <li>{{error}}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class ="form-field">{{form.rating.label}} </br>{{form.rating(size = 100, placeholder="1-5")}}
+                    {% if form.comment.errors %}
+                        <ul class="errors">
+        	            {% for error in form.comment.errors %}
+        		            <li>{{error}}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                {{ form.submit }}
+            </form>
+        </div>
+
+        <div style="clear:both" class="form-reviews">
+
+            {% if podcast._reviews|length > 0 %}
+                <h3 style="text-align:center">Reviews</h3>
+            {% endif %}
+
+            {% for review in podcast._reviews %}
+            <div class="form-review">
+                <p style="text-decoration: underline;margin-bottom:0px;">{{review._rating}}★ by {{review._poster._username}}</p>
+                <p style="font-style: italic;margin-top:0px;">"{{review._comment}}"</p>
+            </div>
+            <br>
+            {% endfor %}
+    </div>
+</body>
+</html>
