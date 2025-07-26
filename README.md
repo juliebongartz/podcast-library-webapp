@@ -59,6 +59,11 @@ The data files are modified excerpts downloaded from:
 
 https://www.kaggle.com/code/switkowski/building-a-podcast-recommendation-engine/input
 
+## Project Details
+
+This project was developed collaboratively as a group effort for COMPSCI 235 at the University of Auckland. Each member contributed to different components including backend, frontend, and testing.
+
+
 
 
 
