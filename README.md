@@ -1,9 +1,11 @@
-# COMPSCI 235 - Starter Repository for the CS235 Pod Library
-This is a starter repository for the podcasts webapp project of CompSci 235 in Semester 2, 2024.
+# Podcast Library Web Application
+A Python/Flask-based web application for managing and browsing a podcast library. Features include domain model implementation, unit testing, and an HTML-based interface.
 
-## Description
-
-This repository contains a partial implementation of the domain model. It contains unit tests which can be run through pytest. It also contains a simple Flask application that renders content of a Podcast object instance from our domain model on a blank HTML page. You'll be expanding the domain model implementation, and you have the freedom to modify or remove test cases as needed.
+Tech stack: Python, Flask, HTML/CSS, unittest
+Key contributions:
+-Expanded the domain model implementation.
+-Developed unit tests to verify functionality.
+-Integrated templates for displaying podcast data.
 
 ## Installation
 
@@ -58,10 +60,6 @@ The *project directory/.env* file contains variable settings. They are set with 
 The data files are modified excerpts downloaded from:
 
 https://www.kaggle.com/code/switkowski/building-a-podcast-recommendation-engine/input
-
-## Project Details
-
-This project was developed collaboratively as a group effort for COMPSCI 235 at the University of Auckland. Each member contributed to different components including backend, frontend, and testing.
 
 
 
